@@ -1,40 +1,49 @@
-import type { Metadata } from "next";
-import { Open_Sans, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Kantumruy_Pro, Mona_Sans } from "next/font/google";
+import Reveal from "@/components/Reveal";
 import "./globals.css";
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
+const mona = Mona_Sans({
   subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-mona",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
+const khmer = Kantumruy_Pro({
+  subsets: ["khmer"],
+  variable: "--font-khmer",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Horizxon - Website Development",
+  title: "Horizxon",
   description:
-    "Horizxon delivers cutting-edge website development solutions that transform your business vision into powerful digital experiences. From responsive design to full-stack development.",
-  keywords:
-    "website development, web design, frontend development, backend development, full-stack development, React, Next.js, Horizxon, HZN",
-  authors: [{ name: "Horizxon (HZN)" }],
-  viewport: "width=device-width, initial-scale=1",
+    "A small software startup in Cambodia. We build CheckSen, Samleng and open-source tools for payments, Khmer and the Mac.",
+  authors: [{ name: "Horizxon" }],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ECE8E1" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E1016" },
+  ],
+};
+
+// Runs before paint so the saved theme never flashes.
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='night'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))d.dataset.theme='night'}catch(e){}})()`;
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${openSans.variable} ${jetbrainsMono.variable} font-sans antialiased text-white`}
-      >
+    <html lang="en" className={`${mona.variable} ${khmer.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: boot }} />
+      </head>
+      <body>
         {children}
+        <Reveal />
       </body>
     </html>
   );
